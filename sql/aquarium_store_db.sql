@@ -1,9 +1,6 @@
-
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
 
 -- -----------------------------------------------------
 -- Schema aquarium_store_db
@@ -40,6 +37,23 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `aquarium_store_db`.`store`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aquarium_store_db`.`store` (
+  `store_id` INT NOT NULL AUTO_INCREMENT,
+  `store_name` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `location` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`store_id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `aquarium_store_db`.`employee`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aquarium_store_db`.`employee` (
@@ -47,7 +61,12 @@ CREATE TABLE IF NOT EXISTS `aquarium_store_db`.`employee` (
   `full_name` VARCHAR(100) NOT NULL,
   `role` VARCHAR(30) NOT NULL,
   `birth_date` DATE NOT NULL,
-  PRIMARY KEY (`employee_id`))
+  `store_id` INT NOT NULL,
+  PRIMARY KEY (`employee_id`),
+  INDEX `fk_employee_store_idx` (`store_id` ASC) VISIBLE,
+  CONSTRAINT `fk_employee_store`
+    FOREIGN KEY (`store_id`)
+    REFERENCES `aquarium_store_db`.`store` (`store_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -142,23 +161,6 @@ CREATE TABLE IF NOT EXISTS `aquarium_store_db`.`order_item` (
     REFERENCES `aquarium_store_db`.`product` (`product_id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `aquarium_store_db`.`store`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aquarium_store_db`.`store` (
-  `store_id` INT NOT NULL AUTO_INCREMENT,
-  `store_name` VARCHAR(100) NOT NULL,
-  `phone` VARCHAR(20) NOT NULL,
-  `location` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`store_id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
